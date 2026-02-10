@@ -11,13 +11,6 @@ MemoryHexWindow::~MemoryHexWindow()
 
 bool MemoryHexWindow::Init()
 {
-	// Initialize with some test data so we can see it working
-	testData.resize(256);
-	for (int i = 0; i < 256; i++)
-	{
-		testData[i] = (unsigned char)i;
-	}
-
 	// Setup editor state
 	editorState.Bytes = testData.data();
 	editorState.MaxBytes = testData.size();
