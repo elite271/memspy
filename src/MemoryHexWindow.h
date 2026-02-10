@@ -35,7 +35,7 @@ public:
 
 private:
 	ImGuiHexEditorState editorState;
-	std::vector<unsigned char> testData;  // Test data for demonstration
+	std::vector<unsigned char> testData;
 	std::vector<std::string> regionLabels;
 	int currentRegionIdx = -1;
 };

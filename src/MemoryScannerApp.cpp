@@ -140,10 +140,3 @@ void MemoryScannerApp::Render()
 
     ImGui::End();
 }
-
-//Then ProcessSelectorWindow.Render() and ScannerWindow.Render() just render their content without creating their own
-// windows - they're rendering inside the tab content area.
-
-// This gives you a clean Cheat Engine - style interface with tabs for different tools, all sharing the same attached
-// process.Much cleaner than managing multiple separate windows!
-

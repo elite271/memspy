@@ -53,7 +53,6 @@ bool ProcessList::scanForProcesses()
 bool ProcessList::init()
 {
     return scanForProcesses();
-    // I know that this and refresh do the same thing but maybe in future might need more initialization.
 }
 
 bool ProcessList::Refresh()

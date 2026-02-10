@@ -21,7 +21,3 @@ private:
 
 };
 
-
-
-// todo process (memory) regions instead of just everything in one class
-
