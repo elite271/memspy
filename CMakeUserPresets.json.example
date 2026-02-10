@@ -1,0 +1,56 @@
+{
+  "version": 3,
+  "comment": "Copy this file to CMakeUserPresets.json and modify SDL3_PATH for your system",
+  "configurePresets": [
+    {
+      "name": "my-windows-debug",
+      "displayName": "My Windows Debug Build",
+      "inherits": "windows-debug",
+      "cacheVariables": {
+        "SDL3_PATH": "E:/sdl3/SDL3-3.2.26"
+      }
+    },
+    {
+      "name": "my-windows-release",
+      "displayName": "My Windows Release Build",
+      "inherits": "windows-release",
+      "cacheVariables": {
+        "SDL3_PATH": "E:/sdl3/SDL3-3.2.26"
+      }
+    },
+    {
+      "name": "my-linux-debug",
+      "displayName": "My Linux Debug Build",
+      "inherits": "linux-debug",
+      "cacheVariables": {
+        "SDL3_PATH": "/opt/SDL3"
+      }
+    },
+    {
+      "name": "my-linux-release",
+      "displayName": "My Linux Release Build",
+      "inherits": "linux-release",
+      "cacheVariables": {
+        "SDL3_PATH": "/opt/SDL3"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "my-windows-debug",
+      "configurePreset": "my-windows-debug"
+    },
+    {
+      "name": "my-windows-release",
+      "configurePreset": "my-windows-release"
+    },
+    {
+      "name": "my-linux-debug",
+      "configurePreset": "my-linux-debug"
+    },
+    {
+      "name": "my-linux-release",
+      "configurePreset": "my-linux-release"
+    }
+  ]
+}
