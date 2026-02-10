@@ -25,17 +25,28 @@ This project uses CMake as its build system, supporting both Windows and Linux.
 
 ## Building on Windows
 
+### Architecture Selection (IMPORTANT!)
+
+**MemoryScanner must be built for the same architecture as the target process:**
+- **x64 (64-bit)** - Required for scanning modern applications (Chrome, Spotify, Discord, etc.)
+- **x86 (32-bit)** - Only for scanning older 32-bit applications
+
+**Default is x64.** A 32-bit build can only see a tiny portion of a 64-bit process's memory (0x10000-0x7FFEFFFF), which will result in finding only 2-5 memory regions instead of hundreds or thousands.
+
 ### Quick Build (Recommended)
 ```bash
-# If SDL3 is installed globally
+# Build x64 (default - for modern 64-bit applications)
 .\build.bat
 
-# If SDL3 is in a custom location
-.\build.bat "E:\sdl3\SDL3-3.2.26"
+# Build x64 with custom SDL3 path
+.\build.bat x64 "E:\sdl3\SDL3-3.2.26"
+
+# Build x86 (for older 32-bit applications)
+.\build.bat x86 "E:\sdl3\SDL3-3.2.26"
 
 # Or set environment variable
 set SDL3_PATH=E:\sdl3\SDL3-3.2.26
-.\build.bat
+.\build.bat x64
 ```
 
 ### Using Visual Studio
@@ -54,6 +65,11 @@ cmake --build build --config Release
 ```
 
 ### Using Ninja (faster)
+
+**Important:** With Ninja, you must run from the correct Visual Studio command prompt for your target architecture:
+- For x64: Open "x64 Native Tools Command Prompt for VS 2022"
+- For x86: Open "x86 Native Tools Command Prompt for VS 2022"
+
 ```bash
 # Configure
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -230,6 +246,25 @@ Install the CMake Tools extension and open the project folder.
 Open the project folder directly - CLion has native CMake support.
 
 ## Troubleshooting
+
+### Only Finding 2-5 Memory Regions in Target Process
+
+**Symptom:** When scanning a 64-bit application like Spotify or Chrome, only 2-5 regions are found with addresses around 0x7FFE0000.
+
+**Cause:** You built a 32-bit (x86) version of MemoryScanner, which can only access a small portion of a 64-bit process's address space (0x10000 to 0x7FFEFFFF).
+
+**Solution:** Rebuild as 64-bit:
+```bash
+# Delete old build
+rmdir /s /q build
+
+# Rebuild for x64
+.\build.bat x64 "E:\sdl3\SDL3-3.2.26"
+```
+
+**How to verify:** After fixing, you should see:
+- Debug output showing address range up to `0x00007FFFFFFEFFFF` (not `0x7FFEFFFF`)
+- Hundreds or thousands of memory regions found (not just 2-5)
 
 ### SDL3 Not Found
 
