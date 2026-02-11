@@ -140,6 +140,7 @@ void DisassemblyView::Render(MemoryRegions* regions, std::optional<ProcessHandle
 			for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++)
 			{
 				const auto& instr = instructions[row];
+
 				ImGui::TableNextRow();
 
 				// Address
@@ -148,6 +149,7 @@ void DisassemblyView::Render(MemoryRegions* regions, std::optional<ProcessHandle
 
 				// Bytes (hex)
 				ImGui::TableSetColumnIndex(1);
+
 				char bytesStr[512] = { 0 };
 				for (size_t i = 0; i < instr.bytes.size() && i < 16; ++i)  // Limit to 16 bytes display
 				{
@@ -157,7 +159,29 @@ void DisassemblyView::Render(MemoryRegions* regions, std::optional<ProcessHandle
 
 				// Mnemonic
 				ImGui::TableSetColumnIndex(2);
-				ImGui::TextColored(ImVec4{0.0f, 1.0f, 1.0f, 1.0f}, "%s", instr.mnemonic.c_str());
+
+				const auto& cat_color = GetCategoryColor(instr.category);
+
+				switch (cat_color)
+				{
+				case CALL:
+					ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", instr.mnemonic.c_str());
+					break;
+				case JCC:
+					ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", instr.mnemonic.c_str());
+					break;
+				case JMP:
+					ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", instr.mnemonic.c_str());
+					break;
+				case RET:
+					ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", instr.mnemonic.c_str());
+					break;
+				default:
+					ImGui::Text("%s", instr.mnemonic.c_str());
+					break;
+				}
+
+				
 
 				// Operands
 				ImGui::TableSetColumnIndex(3);
@@ -239,21 +263,20 @@ void DisassemblyView::DisassembleRegion(const MemoryRegion& region, std::optiona
 	}
 }
 
-std::string DisassemblyView::GetCategoryColor(ZydisInstructionCategory category) const
+CategoryColor DisassemblyView::GetCategoryColor(ZydisInstructionCategory category) const
 {
-	// Return color codes or names for different instruction categories
 	switch (category)
 	{
 	case ZYDIS_CATEGORY_CALL:
-		return "CALL";
+		return CALL;
 	case ZYDIS_CATEGORY_COND_BR:
-		return "JCC";
+		return JCC;
 	case ZYDIS_CATEGORY_UNCOND_BR:
-		return "JMP";
+		return JMP;
 	case ZYDIS_CATEGORY_RET:
-		return "RET";
+		return RET;
 	default:
-		return "NORMAL";
+		return NORMAL;
 	}
 }
 

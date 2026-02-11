@@ -21,6 +21,15 @@ struct DisassembledInstruction
 	ZydisInstructionCategory category;
 };
 
+enum CategoryColor 
+{
+	CALL,
+	JCC,
+	JMP,
+	RET,
+	NORMAL
+};
+
 class DisassemblyView
 {
 public:
@@ -46,7 +55,7 @@ public:
 
 private:
 	void DisassembleRegion(const MemoryRegion& region, std::optional<ProcessHandle>& procHandle);
-	std::string GetCategoryColor(ZydisInstructionCategory category) const;
+	CategoryColor GetCategoryColor(ZydisInstructionCategory category) const;
 	bool IsExecutableRegion(DWORD protection) const;
 
 	std::vector<DisassembledInstruction> instructions;
