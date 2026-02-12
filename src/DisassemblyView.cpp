@@ -165,23 +165,21 @@ void DisassemblyView::Render(MemoryRegions* regions, std::optional<ProcessHandle
 				switch (cat_color)
 				{
 				case CALL:
-					ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", instr.mnemonic.c_str());
+					ImGui::TextColored(ImVec4{0.4f, 0.8f, 1.0f, 1.0f}, "%s", instr.mnemonic.c_str());
 					break;
 				case JCC:
-					ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", instr.mnemonic.c_str());
+					ImGui::TextColored(ImVec4{1.0f, 1.0f, 0.0f, 1.0f}, "%s", instr.mnemonic.c_str());
 					break;
 				case JMP:
-					ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", instr.mnemonic.c_str());
+					ImGui::TextColored(ImVec4{1.0f, 0.4f, 1.0f, 1.0f}, "%s", instr.mnemonic.c_str());
 					break;
 				case RET:
-					ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", instr.mnemonic.c_str());
+					ImGui::TextColored(ImVec4{1.0f, 0.3f, 0.3f, 1.0f}, "%s", instr.mnemonic.c_str());
 					break;
 				default:
 					ImGui::Text("%s", instr.mnemonic.c_str());
 					break;
 				}
-
-				
 
 				// Operands
 				ImGui::TableSetColumnIndex(3);
