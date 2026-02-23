@@ -172,6 +172,7 @@ int main(int, char**)
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.IniFilename = nullptr;
 
     // Load a better monospace font for memory addresses
     // Try Windows default fonts, fallback to ImGui default if not found
