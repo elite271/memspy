@@ -10,7 +10,8 @@
 #include <optional>
 #include "MemoryRegions.h"
 #include "ProcessHandle.h"
-#include "include/zydis/Zydis.h"
+// #include "include/zydis/Zydis.h"
+#include "Zydis.h"
 
 struct DisassembledInstruction
 {

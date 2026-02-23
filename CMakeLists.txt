@@ -68,20 +68,20 @@ endif()
 
 # ImGui sources
 set(IMGUI_SOURCES
-    src/include/imgui/imgui.cpp
-    src/include/imgui/imgui_demo.cpp
-    src/include/imgui/imgui_draw.cpp
-    src/include/imgui/imgui_stdlib.cpp
-    src/include/imgui/imgui_tables.cpp
-    src/include/imgui/imgui_widgets.cpp
-    src/include/imgui/imgui_impl_sdl3.cpp
-    src/include/imgui/imgui_impl_sdlrenderer3.cpp
-    src/include/imgui/imgui_hex.cpp
+    include/imgui/imgui.cpp
+    include/imgui/imgui_demo.cpp
+    include/imgui/imgui_draw.cpp
+    include/imgui/imgui_stdlib.cpp
+    include/imgui/imgui_tables.cpp
+    include/imgui/imgui_widgets.cpp
+    include/imgui/imgui_impl_sdl3.cpp
+    include/imgui/imgui_impl_sdlrenderer3.cpp
+    include/imgui/imgui_hex.cpp
 )
 
 # Zydis sources
 set(ZYDIS_SOURCES
-    src/include/zydis/Zydis.c
+    include/zydis/Zydis.c
 )
 
 # Application sources
@@ -113,8 +113,8 @@ set(APP_HEADERS
     src/ProcessSelectorWindow.h
     src/ScannerWindow.h
     src/ScanUtils.h
-    src/include/imgui/imgui_stdlib.h
-    src/include/zydis/Zydis.h
+    include/imgui/imgui_stdlib.h
+    "include/zydis/Zydis.h"
 )
 
 # Create executable
@@ -128,8 +128,8 @@ add_executable(MemoryScanner
 # Include directories
 target_include_directories(MemoryScanner PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/imgui
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/zydis
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/imgui
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/zydis
 )
 
 # Link SDL3
