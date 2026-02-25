@@ -2,7 +2,7 @@
 A simple memory scanner
 
 ## Screenshots
-<img scr="memspy/assets/screenshot1.png" alt="A screenshot of the scanner">
+<img scr="assets/screenshot1.png" alt="A screenshot of the scanner">
 <img scr="memspy/assets/screenshot2.png" alt="A screenshot of memory regions">
 <img scr="memspy/assets/screenshot3.png" alt="A screenshot of memory region hex view">
 <img scr="memspy/assets/screenshot4.png" alt="A screenshot of disasm view">
