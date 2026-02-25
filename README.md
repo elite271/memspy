@@ -2,10 +2,10 @@
 A simple memory scanner
 
 ## Screenshots
-<img scr="assets/screenshot1.png" alt="A screenshot of the scanner">
-<img scr="memspy/assets/screenshot2.png" alt="A screenshot of memory regions">
-<img scr="memspy/assets/screenshot3.png" alt="A screenshot of memory region hex view">
-<img scr="memspy/assets/screenshot4.png" alt="A screenshot of disasm view">
+<img src="assets/screenshot1.png" alt="A screenshot of the scanner">
+<img src="assets/screenshot2.png" alt="A screenshot of memory regions">
+<img src="assets/screenshot3.png" alt="A screenshot of memory region hex view">
+<img src="assets/screenshot4.png" alt="A screenshot of disasm view">
 
 ## Building
 Please refer to BUILD.md for build instructions.
