@@ -2,10 +2,14 @@
 A simple memory scanner
 
 ## Screenshots
-<img src="assets/screenshot1.png" alt="A screenshot of the scanner">
-<img src="assets/screenshot2.png" alt="A screenshot of memory regions">
-<img src="assets/screenshot3.png" alt="A screenshot of memory region hex view">
-<img src="assets/screenshot4.png" alt="A screenshot of disasm view">
+### Scanner
+<img src="assets/screenshot1.png" alt="A screenshot of the scanner" width="400" height="400">
+### Memory Regions
+<img src="assets/screenshot2.png" alt="A screenshot of memory regions" width="400" height="400">
+### Hex View
+<img src="assets/screenshot3.png" alt="A screenshot of memory region hex view" width="400" height="400">
+### Disassembly
+<img src="assets/screenshot4.png" alt="A screenshot of disasm view" width="400" height="400">
 
 ## Building
 Please refer to BUILD.md for build instructions.
