@@ -1,6 +1,12 @@
 # memspy
 A simple memory scanner
 
+## Screenshots
+<img scr="assets/screenshot1" alt="A screenshot of the scanner">
+<img scr="assets/screenshot2" alt="A screenshot of memory regions">
+<img scr="assets/screenshot3" alt="A screenshot of memory region hex view">
+<img scr="assets/screenshot4" alt="A screenshot of disasm view">
+
 ## Building
 Please refer to BUILD.md for build instructions.
 
