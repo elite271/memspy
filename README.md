@@ -15,7 +15,7 @@ A simple memory scanner
 <img src="assets/screenshot4.png" alt="A screenshot of disasm view" width="400" height="400">
 
 ## Building
-Please refer to BUILD.md for build instructions.
+Please refer to [BUILD.md](BUILD.md) for build instructions.
 
 ## Thanks
 - SDL3 for windowing [SDL3](https://github.com/libsdl-org/SDL)
