@@ -1,5 +1,26 @@
 #include "ProcessHandle.h"
 
+
+static uintptr_t GetModuleBaseAddress(DWORD procID)
+{
+	MODULEENTRY32 moduleEntry = { 0 };
+	moduleEntry.dwSize = sizeof(MODULEENTRY32);
+
+	HANDLE processSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, procID);
+
+	if (processSnapshot == INVALID_HANDLE_VALUE)
+		return reinterpret_cast<uintptr_t>(nullptr);
+
+	if (Module32First(processSnapshot, &moduleEntry))
+	{
+		return reinterpret_cast<uintptr_t>(moduleEntry.modBaseAddr);
+	}
+
+	CloseHandle(processSnapshot);
+
+	return reinterpret_cast<uintptr_t>(nullptr);
+}
+
 ProcessHandle::ProcessHandle(const Process& process)
 {
 	processID = process.processID;
@@ -16,6 +37,13 @@ ProcessHandle::ProcessHandle(const Process& process)
 	if (processHandle == nullptr)
 	{
 		printf("Couldnt get handle to process %d", GetLastError());
+	}
+
+	ModuleBase = GetModuleBaseAddress(processID);
+
+	if (!ModuleBase)
+	{
+		printf("Could not get module base address. %d", GetLastError());
 	}
 }
 
@@ -63,4 +91,9 @@ DWORD ProcessHandle::GetProcessID() const
 bool ProcessHandle::IsValid() const 
 { 
 	return processHandle != nullptr;
+}
+
+uintptr_t ProcessHandle::GetModBase() const
+{
+	return ModuleBase;
 }

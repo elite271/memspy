@@ -235,6 +235,9 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 	float scanTypeWidth = 150.0f; // Width for scan type combo
 	float spacing = ImGui::GetStyle().ItemSpacing.x;
 
+	// Get module base to calculate offset
+	uintptr_t ModBase = processHandle.GetModBase();
+
 	// Show scan type combo after first scan
 	if (hasScannedOnce)
 	{
@@ -305,7 +308,8 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 				ImGui::TableNextRow();
 
 				ImGui::TableSetColumnIndex(0);
-				ImGui::Text("0x%016llX", scanResults[i].address);
+				// ImGui::Text("0x%016llX", scanResults[i].address);
+				ImGui::Text("0x%016llX", ModBase - scanResults[i].address);
 
 				ImGui::TableSetColumnIndex(1);
 

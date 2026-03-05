@@ -16,11 +16,13 @@ public:
 	HANDLE GetHandle() const; 
 	DWORD GetProcessID() const;
 	bool IsValid() const;
+	uintptr_t GetModBase() const;
 
 
 private:
 	HANDLE processHandle = nullptr;
 	DWORD processID = 0;
+	uintptr_t ModuleBase;
 };
 
 
