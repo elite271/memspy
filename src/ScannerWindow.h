@@ -65,5 +65,7 @@ private:
 	int selectedResultIndex = -1;
 	bool showEditPopup = false;
 	char editBuffer[64] = {};
+
+	uintptr_t owningBase;
 };
 

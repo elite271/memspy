@@ -1,6 +1,46 @@
 #include "ScannerWindow.h"
 #include <charconv>
 
+#ifdef _WIN32
+	#include <psapi.h>
+	#pragma comment(lib, "psapi.lib")
+
+static uintptr_t FindOwningModuleBase(HANDLE hProcess, uintptr_t address)
+{
+	HMODULE hMods[1024];
+	DWORD cbNeeded;
+	if (!EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
+	{
+		return 0;
+	}
+
+	for (int i = 0; i < cbNeeded / sizeof(HMODULE); i++)
+	{
+		MODULEINFO modInfo;
+
+		if (!GetModuleInformation(hProcess, hMods[i], &modInfo, sizeof(modInfo)))
+		{
+			continue;
+		}
+
+		uintptr_t base = (uintptr_t)modInfo.lpBaseOfDll;
+		uintptr_t end = base + modInfo.SizeOfImage;
+
+		if (address >= base && address < end)
+		{
+			char name[256];
+			GetModuleFileNameExA(hProcess, hMods[i], name, sizeof(name));
+			printf("Module: %s\n", name);
+			printf("Base: 0x%016llX\n", base);
+			return base;
+		}
+	}
+
+	return 0;
+}
+
+#endif
+
 ScannerWindow::ScannerWindow()
 {
 }
@@ -277,6 +317,14 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 	if (ImGui::Button(buttonText) && regions && regions->isValid())
 	{
 		OnScanButtonPressed(processHandle, *regions);
+
+#ifdef WIN32
+		if (!scanResults.empty())
+		{
+			owningBase = FindOwningModuleBase(processHandle.GetHandle(), scanResults[0].address);
+			printf("Owning base: 0x%016llX\n", owningBase);
+		}
+#endif
 	}
 
 	if (hasScannedOnce)
@@ -286,6 +334,7 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 		{
 			ResetScanState();
 			scanTypeIdx = 0; // Reset scan type dropdown
+			owningBase = 0;
 		}
 	}
 
@@ -313,7 +362,7 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 
 				ImGui::TableSetColumnIndex(0);
 				// ImGui::Text("0x%016llX", scanResults[i].address);
-				ImGui::Text("0x%016llX", scanResults[i].address);
+				ImGui::Text("0x%016llX", owningBase ? scanResults[i].address - owningBase : scanResults[i].address);
 
 				ImGui::TableSetColumnIndex(1);
 
