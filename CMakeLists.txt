@@ -123,7 +123,7 @@ add_executable(MemoryScanner
     ${ZYDIS_SOURCES}
     ${APP_SOURCES}
     ${APP_HEADERS}
-)
+ "src/PointerScanWindow.h" "src/PointerScanWindow.cpp" "src/PointerScanner.h" "src/PointerScanner.cpp")
 
 # Include directories
 target_include_directories(MemoryScanner PRIVATE
