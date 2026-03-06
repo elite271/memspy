@@ -238,6 +238,8 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 	// Get module base to calculate offset
 	uintptr_t ModBase = processHandle.GetModBase();
 
+	ImGui::Text("ModBase: 0x%016llX", ModBase);
+
 	// Show scan type combo after first scan
 	if (hasScannedOnce)
 	{
@@ -246,7 +248,9 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 		{
 			currentScanType = static_cast<ScanType>(scanTypeIdx + 1); // +1 to skip FirstScan
 		}
+
 		ImGui::SameLine();
+
 		availWidth -= scanTypeWidth + spacing;
 	}
 
@@ -309,7 +313,7 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 
 				ImGui::TableSetColumnIndex(0);
 				// ImGui::Text("0x%016llX", scanResults[i].address);
-				ImGui::Text("0x%016llX", ModBase - scanResults[i].address);
+				ImGui::Text("0x%016llX", scanResults[i].address);
 
 				ImGui::TableSetColumnIndex(1);
 

@@ -3,22 +3,26 @@
 
 static uintptr_t GetModuleBaseAddress(DWORD procID)
 {
-	MODULEENTRY32 moduleEntry = { 0 };
-	moduleEntry.dwSize = sizeof(MODULEENTRY32);
+    MODULEENTRY32 moduleEntry = { 0 };
+    moduleEntry.dwSize = sizeof(MODULEENTRY32);
 
-	HANDLE processSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, procID);
+    HANDLE processSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, procID);
 
 	if (processSnapshot == INVALID_HANDLE_VALUE)
+	{
 		return reinterpret_cast<uintptr_t>(nullptr);
+	}
+
+    uintptr_t baseAddr = 0;
 
 	if (Module32First(processSnapshot, &moduleEntry))
 	{
-		return reinterpret_cast<uintptr_t>(moduleEntry.modBaseAddr);
+		baseAddr = reinterpret_cast<uintptr_t>(moduleEntry.modBaseAddr);
 	}
+    
+    CloseHandle(processSnapshot);
 
-	CloseHandle(processSnapshot);
-
-	return reinterpret_cast<uintptr_t>(nullptr);
+    return baseAddr;
 }
 
 ProcessHandle::ProcessHandle(const Process& process)
