@@ -1,3 +1,10 @@
+#ifdef WIN32
+#include <Windows.h>
+#include <process.h>
+#endif
+
+#include <thread>
+
 #include "ScannerWindow.h"
 #include <charconv>
 
@@ -314,26 +321,31 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 	ImGui::EndDisabled();
 
 	const char* buttonText = hasScannedOnce ? "Next Scan" : "First Scan";
-	if (ImGui::Button(buttonText) && regions && regions->isValid())
+	if (ImGui::Button(buttonText) && regions && regions->isValid() && !isScanning)
 	{
-		OnScanButtonPressed(processHandle, *regions);
+		isScanning = true;
+		std::thread([this, &processHandle, regions]() {
 
-		if (!scanResults.empty())
-		{
-			auto modules = processHandle.GetModuleList();
-			for (auto& result : scanResults)
+			OnScanButtonPressed(processHandle, *regions);
+
+			if (!scanResults.empty())
 			{
-				for (auto& mod : modules)
+				auto modules = processHandle.GetModuleList();
+				for (auto& result : scanResults)
 				{
-					if (result.address >= mod.base && result.address < mod.base + mod.size)
+					for (auto& mod : modules)
 					{
-						result.owningBase = mod.base;
-						result.owningModule = mod.name;
-						break;
+						if (result.address >= mod.base && result.address < mod.base + mod.size)
+						{
+							result.owningBase = mod.base;
+							result.owningModule = mod.name;
+							break;
+						}
 					}
 				}
 			}
-		}
+			isScanning = false;
+			}).detach();
 	}
 
 	if (hasScannedOnce)

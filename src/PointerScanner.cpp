@@ -104,6 +104,7 @@ void PointerScanner::Scan(
         visited.insert(work.target);
 
         auto candidates = FindPointersToAddress(handle.GetHandle(), regions, work.target, maxOffset);
+        printf("Depth %d, target 0x%llX: %zu candidates\n", work.depth, work.target, candidates.size());
 
         for (const auto& candidate : candidates)
         {
