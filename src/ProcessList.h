@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "Process.h"
+#include "MemSpyProcess.h"
 
 class ProcessList
 {

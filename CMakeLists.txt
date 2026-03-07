@@ -92,7 +92,7 @@ set(APP_SOURCES
     src/MemoryRegions.cpp
     src/MemoryRegionsView.cpp
     src/MemoryScannerApp.cpp
-    src/Process.cpp
+    "src/MemSpyProcess.cpp"
     src/ProcessHandle.cpp
     src/ProcessList.cpp
     src/ProcessSelectorWindow.cpp
@@ -107,7 +107,7 @@ set(APP_HEADERS
     src/MemoryRegions.h
     src/MemoryRegionsView.h
     src/MemoryScannerApp.h
-    src/Process.h
+    "src/MemSpyProcess.h"
     src/ProcessHandle.h
     src/ProcessList.h
     src/ProcessSelectorWindow.h
@@ -142,6 +142,8 @@ if(PLATFORM_WINDOWS)
         WIN32
         _CONSOLE
         ZYDIS_STATIC_BUILD
+        _WIN32_WINNT=0x0601 
+        _CRT_SECURE_NO_WARNINGS
     )
 
     # Use MultiByte character set (not Unicode) to match existing code
@@ -152,6 +154,9 @@ if(PLATFORM_WINDOWS)
         set_target_properties(MemoryScanner PROPERTIES
             LINK_FLAGS "/SUBSYSTEM:CONSOLE"
         )
+
+        #remove this if doesnt work
+        target_compile_options(MemoryScanner PRIVATE /MD)
     endif()
 
     # Automatically copy SDL3.dll to output directory after build

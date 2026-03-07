@@ -1,6 +1,12 @@
+#ifdef WIN32
+#include <Windows.h>
+#include <process.h>
+#endif
+
 #include "PointerScanWindow.h"
 #include "imgui.h"
 #include "imgui_stdlib.h"
+#include <thread>
 
 PointerScanWindow::PointerScanWindow()
 {
@@ -36,21 +42,28 @@ void PointerScanWindow::Render(MemoryRegions* regions, std::optional<ProcessHand
     ImGui::SameLine();
     ImGui::Text("Max Depth:");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(50.0f);
+    ImGui::SetNextItemWidth(100.0f);
     ImGui::InputInt("##MaxDepth", &maxDepth);
 
     ImGui::SameLine();
     if (ImGui::Button("Scan"))
     {
-        uintptr_t target = std::stoull(targetAddressInput, nullptr, 16);
-        uintptr_t maxOffset = std::stoull(maxOffsetInput, nullptr, 16);
-        if (procHandle.has_value())
+        try
         {
-            scanner.Scan(procHandle.value(), *regions, target, maxOffset, maxDepth);
+            uintptr_t target = std::stoull(targetAddressInput, nullptr, 16);
+            uintptr_t maxOffset = std::stoull(maxOffsetInput, nullptr, 16);
+            if (procHandle.has_value())
+            {
+                isScanning = true;
+                std::thread([this, &procHandle, regions, target, maxOffset]() {
+                    scanner.Scan(procHandle.value(), *regions, target, maxOffset, maxDepth);
+                    isScanning = false;
+                    }).detach();
+            }
         }
-        else
+        catch (const std::exception& e)
         {
-            return;
+            printf("Invalid input: %s\n", e.what());
         }
     }
 

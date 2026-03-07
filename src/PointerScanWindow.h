@@ -15,7 +15,7 @@ private:
 	PointerScanner scanner;
 	std::string targetAddressInput;
 	std::string maxOffsetInput = "500";
-	int maxDepth = 4;
+	int maxDepth = 1; // originally 4
 	bool isScanning = false;
 };
 
