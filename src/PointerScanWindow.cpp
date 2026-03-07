@@ -86,6 +86,11 @@ void PointerScanWindow::Render(MemoryRegions* regions, std::optional<ProcessHand
 
             for (const auto& chain : scanner.GetResults())
             {
+                if (chain.moduleName.find(procHandle->GetProcessName()) == std::string::npos)
+                {
+                    continue;
+                }
+
                 ImGui::TableNextRow();
 
                 ImGui::TableSetColumnIndex(0);

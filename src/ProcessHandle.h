@@ -26,6 +26,8 @@ public:
 	uintptr_t GetModBase() const;
 	std::vector<ModuleInfo> GetModuleList() const;
 
+	std::string GetProcessName() const;
+
 private:
 	HANDLE processHandle = nullptr;
 	DWORD processID = 0;

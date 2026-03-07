@@ -139,3 +139,14 @@ std::vector<ModuleInfo> ProcessHandle::GetModuleList() const
 
 	return modules;
 }
+
+std::string ProcessHandle::GetProcessName() const
+{
+	char name[256] = {};
+	DWORD size = sizeof(name);
+	QueryFullProcessImageNameA(processHandle, 0, name, &size);
+	// Just return the filename, not the full path
+	std::string fullPath(name);
+	size_t pos = fullPath.find_last_of("\\/");
+	return pos != std::string::npos ? fullPath.substr(pos + 1) : fullPath;
+}
