@@ -1,5 +1,10 @@
 #include "ProcessHandle.h"
 
+#ifdef WIN32
+#include <psapi.h>
+#pragma comment(lib, "psapi.lib")
+#endif
+
 
 static uintptr_t GetModuleBaseAddress(DWORD procID)
 {
@@ -100,4 +105,37 @@ bool ProcessHandle::IsValid() const
 uintptr_t ProcessHandle::GetModBase() const
 {
 	return ModuleBase;
+}
+
+std::vector<ModuleInfo> ProcessHandle::GetModuleList() const
+{
+	std::vector<ModuleInfo> modules;
+
+#ifdef WIN32
+	HMODULE hMods[1024];
+	DWORD cbNeeded;
+
+	if (!EnumProcessModules(processHandle, hMods, sizeof(hMods), &cbNeeded))
+	{
+		return modules;
+	}
+
+	for (int i = 0; i < cbNeeded / sizeof(HMODULE); i++)
+	{
+		MODULEINFO modInfo;
+		if (!GetModuleInformation(processHandle, hMods[i], &modInfo, sizeof(modInfo)))
+			continue;
+
+		char name[256];
+		GetModuleFileNameExA(processHandle, hMods[i], name, sizeof(name));
+
+		modules.push_back({
+			reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll),
+			modInfo.SizeOfImage,
+			std::string(name)
+			});
+	}
+#endif
+
+	return modules;
 }

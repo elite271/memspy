@@ -21,7 +21,9 @@ struct ScanResult
 {
 	uintptr_t address;
 	size_t regionIndex;
-	std::vector<uint8_t> storedValue;  // Store bytes for comparison
+	std::vector<uint8_t> storedValue;
+	uintptr_t owningBase = 0;
+	std::string owningModule;
 };
 
 class ScanUtils

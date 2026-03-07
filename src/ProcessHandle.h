@@ -3,6 +3,13 @@
 #include "Platform.h"
 #include "Process.h"
 
+struct ModuleInfo
+{
+	uintptr_t base;
+	uintptr_t size;
+	std::string name;
+};
+
 class ProcessHandle
 {
 public:
@@ -17,7 +24,7 @@ public:
 	DWORD GetProcessID() const;
 	bool IsValid() const;
 	uintptr_t GetModBase() const;
-
+	std::vector<ModuleInfo> GetModuleList() const;
 
 private:
 	HANDLE processHandle = nullptr;

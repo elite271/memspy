@@ -318,13 +318,22 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 	{
 		OnScanButtonPressed(processHandle, *regions);
 
-#ifdef WIN32
 		if (!scanResults.empty())
 		{
-			owningBase = FindOwningModuleBase(processHandle.GetHandle(), scanResults[0].address);
-			printf("Owning base: 0x%016llX\n", owningBase);
+			auto modules = processHandle.GetModuleList();
+			for (auto& result : scanResults)
+			{
+				for (auto& mod : modules)
+				{
+					if (result.address >= mod.base && result.address < mod.base + mod.size)
+					{
+						result.owningBase = mod.base;
+						result.owningModule = mod.name;
+						break;
+					}
+				}
+			}
 		}
-#endif
 	}
 
 	if (hasScannedOnce)
@@ -343,13 +352,13 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 
 	ImGui::Separator();
 
-	// Display scan results in a table
 	if (!scanResults.empty())
 	{
-		if (ImGui::BeginTable("ResultsTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Resizable))
+		if (ImGui::BeginTable("ResultsTable", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Resizable))
 		{
-			ImGui::TableSetupColumn("Address", ImGuiTableColumnFlags_WidthFixed, 150.0f);
+			ImGui::TableSetupColumn("Address", ImGuiTableColumnFlags_WidthFixed, 200.0f);
 			ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("Module", ImGuiTableColumnFlags_WidthStretch);
 			ImGui::TableSetupScrollFreeze(0, 1);
 			ImGui::TableHeadersRow();
 
@@ -362,7 +371,9 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 
 				ImGui::TableSetColumnIndex(0);
 				// ImGui::Text("0x%016llX", scanResults[i].address);
-				ImGui::Text("0x%016llX", owningBase ? scanResults[i].address - owningBase : scanResults[i].address);
+				ImGui::Text("0x%016llX", scanResults[i].owningBase ?
+					scanResults[i].address - scanResults[i].owningBase :
+					scanResults[i].address);
 
 				ImGui::TableSetColumnIndex(1);
 
@@ -494,6 +505,18 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 					break;
 				}
 				}
+
+				ImGui::TableSetColumnIndex(2);
+				
+				if (scanResults[i].owningBase)
+				{
+					ImGui::Text("%s+0x%llX", scanResults[i].owningModule.c_str(), scanResults[i].address - scanResults[i].owningBase);
+				}
+				else
+				{
+					ImGui::Text("heap");
+				}
+				
 
 				if (!readSuccess)
 				{
