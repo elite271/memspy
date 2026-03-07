@@ -14,7 +14,8 @@ bool MemoryScannerApp::Init()
         scannerWindow.Init() &&
         hexWindow.Init() &&
         regionsView.Init() &&
-        disassemblyView.Init();
+        disassemblyView.Init() &&
+        pointerScanWindow.Init();
 }
 
 void MemoryScannerApp::OnWindowResize(float width, float height)
@@ -130,6 +131,25 @@ void MemoryScannerApp::Render()
                 ImGui::Text("No process attached. Select a process first.");
                 // Clear disassembly view if process was detached
                 disassemblyView.Clear();
+            }
+
+            ImGui::EndTabItem();
+        }
+
+        if (ImGui::BeginTabItem("Pointer Scan"))
+        {
+            if (attachedProcess.has_value())
+            {
+                if (!memoryRegions.has_value())
+                {
+                    memoryRegions.emplace(attachedProcess);
+                }
+
+                pointerScanWindow.Render(&memoryRegions.value(), attachedProcess);
+            }
+            else
+            {
+                ImGui::Text("No process attached. Select a process first.");
             }
 
             ImGui::EndTabItem();

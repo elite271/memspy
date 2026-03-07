@@ -1,4 +1,5 @@
 #pragma once
+#include <MemoryRegions.h>
 
 class PointerScanWindow
 {
@@ -7,7 +8,7 @@ public:
 	~PointerScanWindow();
 
 	bool Init();
-	void Render();
+	void Render(MemoryRegions* regions, std::optional<ProcessHandle>& procHandle);
 
 private:
 

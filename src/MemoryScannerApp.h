@@ -6,6 +6,7 @@
 #include "MemoryRegionsView.h"
 #include "DisassemblyView.h"
 #include "MemoryRegions.h"
+#include "PointerScanWindow.h"
 #include <optional>
 
 class MemoryScannerApp
@@ -28,6 +29,7 @@ private:
 	MemoryHexWindow hexWindow;
 	MemoryRegionsView regionsView;
 	DisassemblyView disassemblyView;
+	PointerScanWindow pointerScanWindow;
 
 	// Shared state
 	std::optional<ProcessHandle> attachedProcess;
