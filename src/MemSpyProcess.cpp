@@ -1,4 +1,4 @@
-#include "Process.h"
+#include "MemSpyProcess.h"
 
 Process::Process()
 {

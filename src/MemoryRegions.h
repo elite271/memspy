@@ -4,7 +4,7 @@
 #include <vector>
 #include <optional>
 #include "ProcessHandle.h"
-#include "Process.h"
+#include "MemSpyProcess.h"
 
 enum class MemoryRegionType : uint8_t {
 	Stack,

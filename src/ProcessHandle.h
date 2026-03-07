@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform.h"
-#include "Process.h"
+#include "MemSpyProcess.h"
 
 struct ModuleInfo
 {
