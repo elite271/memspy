@@ -116,7 +116,10 @@ bool MemoryRegions::Refresh(MemoryRegionType type, std::optional<ProcessHandle>&
 
 		if (isCommitted && isReadable && notGuarded && sizeOk)
 		{
-			memoryRegions.push_back({ mbi.BaseAddress, mbi.RegionSize, mbi.Protect });
+			memoryRegions.push_back({ 
+				mbi.BaseAddress, 
+				mbi.RegionSize, 
+				mbi.Protect });
 			filteredRegions++;
 		}
 

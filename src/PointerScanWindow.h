@@ -1,5 +1,6 @@
 #pragma once
 #include <MemoryRegions.h>
+#include "PointerScanner.h"
 
 class PointerScanWindow
 {
@@ -11,6 +12,10 @@ public:
 	void Render(MemoryRegions* regions, std::optional<ProcessHandle>& procHandle);
 
 private:
-
+	PointerScanner scanner;
+	std::string targetAddressInput;
+	std::string maxOffsetInput = "500";
+	int maxDepth = 4;
+	bool isScanning = false;
 };
 

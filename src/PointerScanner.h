@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <vector>
 #include <iostream>
+#include <unordered_set>
 
 #include "MemoryRegions.h"
 
@@ -18,6 +19,11 @@ struct PointerChain
 	std::vector<uintptr_t> offsets;
 };
 
+struct PointerCandidate
+{
+	uintptr_t address;
+	uintptr_t offset;
+};
 
 class PointerScanner
 {
@@ -25,11 +31,11 @@ public:
 	PointerScanner();
 	~PointerScanner();
 
-	static uintptr_t ReadPointer(HANDLE hProcess, uintptr_t address);
+	static bool ReadPointer(HANDLE hProcess, uintptr_t address, uintptr_t& outValue);
 
 	static bool IsValidPointer(uintptr_t value);
 
-	static std::vector<std::pair<uintptr_t, uintptr_t>> FindPointersToAddress(
+	static std::vector<PointerCandidate> FindPointersToAddress(
 		HANDLE hProcess,
 		const MemoryRegions& regions,
 		uintptr_t target,
@@ -37,11 +43,26 @@ public:
 
 	static uintptr_t FindOwningModuleBase(HANDLE hProcess, uintptr_t address);
 
+	void Scan(ProcessHandle& handle, const MemoryRegions& regions, uintptr_t target, uintptr_t maxOffset, int maxDepth);
 
-
-	void Scan(ProcessHandle& handle, const MemoryRegions& regions, uintptr_t target);
+	const std::vector<PointerChain>& GetResults() const { return results; }
 
 private:
+
+	struct Node
+	{
+		uintptr_t address;
+		int parent;
+		uintptr_t offset;
+	};
+
+	struct WorkItem
+	{
+		uintptr_t target;
+		int depth;
+		int nodeIdx;
+	};
+
 	std::vector<PointerChain> results;
 };
 
