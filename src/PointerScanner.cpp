@@ -124,7 +124,7 @@ void PointerScanner::Scan(
                 {
                     // Found a static root, reconstruct the chain
                     PointerChain chain;
-                    chain.moduleOffset = mod.base;
+                    chain.moduleOffset = candidate.address - mod.base;
                     chain.moduleName = mod.name;
 
                     // Walk back up the node tree
