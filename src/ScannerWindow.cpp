@@ -285,7 +285,11 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 	// Get module base to calculate offset
 	uintptr_t ModBase = processHandle.GetModBase();
 
+#ifdef _WIN64
 	ImGui::Text("ModBase: 0x%016llX", ModBase);
+#else
+	ImGui::Text("ModBase: 0x%08X", (uint32_t)ModBase);
+#endif
 
 	// Show scan type combo after first scan
 	if (hasScannedOnce)
@@ -382,10 +386,18 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 				ImGui::TableNextRow();
 
 				ImGui::TableSetColumnIndex(0);
-				// ImGui::Text("0x%016llX", scanResults[i].address);
+
+#ifdef _WIN64
 				ImGui::Text("0x%016llX", scanResults[i].owningBase ?
 					scanResults[i].address - scanResults[i].owningBase :
 					scanResults[i].address);
+#else
+				ImGui::Text("0x%08X", scanResults[i].owningBase ?
+					scanResults[i].address - scanResults[i].owningBase :
+					scanResults[i].address);
+#endif
+				
+
 
 				ImGui::TableSetColumnIndex(1);
 
@@ -566,7 +578,12 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 	{
 		if (selectedResultIndex >= 0 && selectedResultIndex < scanResults.size())
 		{
+#ifdef _WIN64
 			ImGui::Text("Address: 0x%016llX", scanResults[selectedResultIndex].address);
+#else
+			ImGui::Text("Address: 0x%08X", scanResults[selectedResultIndex].address);
+#endif
+			
 			ImGui::Separator();
 
 			ImGui::InputText("New Value", editBuffer, sizeof(editBuffer));
@@ -623,11 +640,20 @@ void ScannerWindow::Render(ProcessHandle& processHandle, MemoryRegions* regions)
 
 					if (writeSuccess)
 					{
+#ifdef _WIN64
 						printf("Successfully wrote value to 0x%llX\n", scanResults[selectedResultIndex].address);
+#else
+						printf("Successfully wrote value to 0x%08X\n", scanResults[selectedResultIndex].address);
+#endif
 					}
 					else
 					{
+#ifdef _WIN64
 						printf("Failed to write to 0x%llX\n", scanResults[selectedResultIndex].address);
+#else
+						printf("Failed to write to 0x%08X\n", scanResults[selectedResultIndex].address);
+#endif
+						
 					}
 				}
 				catch (const std::exception& e)

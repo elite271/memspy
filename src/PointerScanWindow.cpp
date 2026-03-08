@@ -50,8 +50,13 @@ void PointerScanWindow::Render(MemoryRegions* regions, std::optional<ProcessHand
     {
         try
         {
+#ifdef _WIN64
             uintptr_t target = std::stoull(targetAddressInput, nullptr, 16);
             uintptr_t maxOffset = std::stoull(maxOffsetInput, nullptr, 16);
+#else
+            uintptr_t target = std::stoul(targetAddressInput, nullptr, 16);
+            uintptr_t maxOffset = std::stoul(maxOffsetInput, nullptr, 16);
+#endif
             if (procHandle.has_value())
             {
                 isScanning = true;
@@ -94,8 +99,12 @@ void PointerScanWindow::Render(MemoryRegions* regions, std::optional<ProcessHand
                 ImGui::TableNextRow();
 
                 ImGui::TableSetColumnIndex(0);
-                ImGui::Text("%s+0x%llX", chain.moduleName.c_str(), chain.moduleOffset);
 
+#ifdef _WIN64
+                ImGui::Text("%s+0x%llX", chain.moduleName.c_str(), chain.moduleOffset);
+#else
+                ImGui::Text("%s+0x%08X", chain.moduleName.c_str(), (uint32_t)chain.moduleOffset);
+#endif
                 ImGui::TableSetColumnIndex(1);
                 // Build offset chain string
                 std::string chainStr;
@@ -103,7 +112,11 @@ void PointerScanWindow::Render(MemoryRegions* regions, std::optional<ProcessHand
                 {
                     if (i > 0) chainStr += " -> ";
                     char buf[32];
+#ifdef _WIN64
                     snprintf(buf, sizeof(buf), "0x%llX", chain.offsets[i]);
+#else
+                    snprintf(buf, sizeof(buf), "0x%08X", (uint32_t)chain.offsets[i]);
+#endif    
                     chainStr += buf;
                 }
                 ImGui::Text("%s", chainStr.c_str());
