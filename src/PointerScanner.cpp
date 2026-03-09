@@ -93,6 +93,11 @@ void PointerScanner::Scan(
 
     while (!workQueue.empty())
     {
+        if (stopScan)
+        {
+            break;
+        }
+
         auto work = workQueue.front();
         workQueue.pop();
 

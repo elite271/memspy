@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <unordered_set>
+#include <atomic>
 
 #include "MemoryRegions.h"
 
@@ -47,6 +48,7 @@ public:
 
 	const std::vector<PointerChain>& GetResults() const { return results; }
 
+	std::atomic<bool> stopScan = false;
 private:
 
 	struct Node

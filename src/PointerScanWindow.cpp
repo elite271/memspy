@@ -48,6 +48,8 @@ void PointerScanWindow::Render(MemoryRegions* regions, std::optional<ProcessHand
     ImGui::SameLine();
     if (ImGui::Button("Scan"))
     {
+        scanner.stopScan = false;
+
         try
         {
 #ifdef _WIN64
@@ -69,6 +71,14 @@ void PointerScanWindow::Render(MemoryRegions* regions, std::optional<ProcessHand
         catch (const std::exception& e)
         {
             printf("Invalid input: %s\n", e.what());
+        }
+    }
+
+    if (isScanning)
+    {
+        if (ImGui::Button("Stop"))
+        {
+            scanner.stopScan = true;
         }
     }
 
